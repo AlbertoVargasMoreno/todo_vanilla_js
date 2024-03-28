@@ -90,9 +90,10 @@ function checkItem() {
 	saveState(listState);
 }
 
-function deleteItem() {
+function deleteItem(event) {
 	const item = this.parentNode;
 	const todosList = item.parentNode;
 	todosList.removeChild(item);
+	event.stopPropagation();
 }
 
