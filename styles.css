@@ -66,17 +66,26 @@ body {
 	position: relative;
 }
 
+/*
+ * icons from:
+ * https://www.flaticon.com/packs/interface-2914
+ */
 .list li::before {
 	content: '';
 	display: inline-block;
 	width: 24px;
 	height: 24px;
-	background-image: url('assets/unchecked.svg');
+/*	background-image: url('assets/unchecked.svg');*/
+	background-image: url('assets/unchecked.png');
 	background-size: contain;
 	background-repeat: no-repeat;
 	cursor: pointer;
 	vertical-align: middle;
 	margin-right: 10px;
+}
+
+.list li.checked::before {
+	background-image: url('assets/checked.png');	
 }
 
 .deleter {
