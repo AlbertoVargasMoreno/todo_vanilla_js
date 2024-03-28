@@ -21,6 +21,7 @@ function initList() {
 		li.innerText = task.text;
 
 		const deleteButton = document.createElement("span");
+		deleteButton.innerHTML = "&times";
 		deleteButton.classList.add("deleter");
 		deleteButton.onclick = deleteItem;
 		li.appendChild(deleteButton);
@@ -29,10 +30,10 @@ function initList() {
 		if (task.checked) {
 			li.classList.add("checked");
 		}
+		li.onclick = checkItem;
 
 		tasksList.appendChild(li);
 	}
-	// needs to render the delete button
 }
 
 const addButton = document.getElementById("add-button");
@@ -79,7 +80,14 @@ function addItem() {
 
 function checkItem() {
 	const item = this;
+	const tasksList = item.parentNode;
+	const index = Array.from(tasksList.childNodes).indexOf(item);
+	
+	listState[index].checked = !listState[index].checked;
+
 	item.classList.toggle("checked");
+
+	saveState(listState);
 }
 
 function deleteItem() {
