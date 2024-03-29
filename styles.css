@@ -66,6 +66,14 @@ body {
 	position: relative;
 }
 
+.list li:hover {
+	background-color: #b4dbff;
+}
+
+.list li.checked {
+	text-decoration: line-through;
+}
+
 /*
  * icons from:
  * https://www.flaticon.com/packs/interface-2914
@@ -89,8 +97,16 @@ body {
 }
 
 .deleter {
-	position: relative;
-	right: 0;
+	position: absolute;
+	right: 6px;
 	cursor: pointer;
+	font-size: 25px;
+	line-height: 1em;
+	padding: 0px 5px;
+	border-radius: 3px;
+	background-color: #eeeff0;
 }
 
+.deleter:hover {
+	background-color: #0000004f;
+}
