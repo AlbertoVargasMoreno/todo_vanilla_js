@@ -88,6 +88,16 @@ function checkItem() {
 function deleteItem(event) {
 	const item = this.parentNode;
 	const todosList = item.parentNode;
+	const indexToRemove = Array.from(todosList.childNodes).indexOf(item);
+
+	// delete LIST_STATE[index]
+	const filtered = LIST_STATE.filter(
+		function (value, index, arr) { 
+    	    return index !== indexToRemove;
+		}
+	);
+	LIST_STATE = filtered;
+	saveState(LIST_STATE);
 
 	todosList.removeChild(item);
 	event.stopPropagation();
