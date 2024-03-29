@@ -1,40 +1,7 @@
-let listState = [];
+let LIST_STATE = [];
 const STATE_KEY = "todo-list";
 
-function loadState() {
-	const listState = localStorage.getItem(STATE_KEY);
-	if (listState !== null) {
-		return JSON.parse(listState);
-	}
-	return [];
-}
-
-function saveState(list) {
-	localStorage.setItem(STATE_KEY, JSON.stringify(list));
-}
-
-function initList() {
-	listState = loadState();
-	const tasksList = document.getElementById("list");
-	for (const task of listState) {
-		const li = document.createElement("li");
-		li.innerText = task.text;
-
-		const deleteButton = document.createElement("span");
-		deleteButton.innerHTML = "&times";
-		deleteButton.classList.add("deleter");
-		deleteButton.onclick = deleteItem;
-		li.appendChild(deleteButton);
-		
-		li.classList.add("item");
-		if (task.checked) {
-			li.classList.add("checked");
-		}
-		li.onclick = checkItem;
-
-		tasksList.appendChild(li);
-	}
-}
+initList();
 
 const addButton = document.getElementById("add-button");
 addButton.addEventListener("click", addItem);
@@ -46,36 +13,64 @@ form.addEventListener("submit",
 	}
 );
 
-initList();
-
-function addItem() {
-	const ul = document.getElementById("list");
-	const input = document.getElementById("input");
-	const text = input.value;
-	if (text === "") {
-		alert("adding empty");
-		return;
+function initList() {
+	LIST_STATE = loadState();
+	const tasksList = document.getElementById("list");
+	for (const task of LIST_STATE) {
+		const li = generateItem(task.text, task.checked);
+		tasksList.appendChild(li);
 	}
+}
 
-	const newItem = document.createElement("li");
-	newItem.innerText = text;
-	newItem.onclick = checkItem;
+function loadState() {
+	const listState = localStorage.getItem(STATE_KEY);
+	if (listState !== null) {
+		return JSON.parse(listState);
+	}
+	return [];
+}
+
+function generateItem(_text, _checked=false) {
+	const item = document.createElement("li");
+	item.innerText = _text;
+	item.classList.add("item");
+	if (_checked) {
+		item.classList.add("checked");
+	}
+	item.onclick = checkItem;
 
 	const deleteButton = document.createElement("span");
-	deleteButton.innerHTML = '&times';
+	deleteButton.innerHTML = "&times";
 	deleteButton.classList.add("deleter");
 	deleteButton.onclick = deleteItem;
 
-	newItem.appendChild(deleteButton);
+	item.appendChild(deleteButton);
+	return item;
+}
+
+function addItem() {
+	const input = document.getElementById("input");
+	const text = input.value;
+	if (text === "") {
+		alert("Error: Task is empty");
+		return;
+	}
+	input.value = "";
+
+	const tasksList = document.getElementById("list");
+	const newItem = generateItem(text);
 	
-	listState.push({
+	LIST_STATE.push({
 		text,
 		checked: false
 	});
-	saveState(listState);
+	saveState(LIST_STATE);
 
-	input.value = "";
-	ul.appendChild(newItem);
+	tasksList.appendChild(newItem);
+}
+
+function saveState(list) {
+	localStorage.setItem(STATE_KEY, JSON.stringify(list));
 }
 
 function checkItem() {
@@ -83,17 +78,17 @@ function checkItem() {
 	const tasksList = item.parentNode;
 	const index = Array.from(tasksList.childNodes).indexOf(item);
 	
-	listState[index].checked = !listState[index].checked;
+	LIST_STATE[index].checked = !LIST_STATE[index].checked;
 
 	item.classList.toggle("checked");
 
-	saveState(listState);
+	saveState(LIST_STATE);
 }
 
 function deleteItem(event) {
 	const item = this.parentNode;
 	const todosList = item.parentNode;
+
 	todosList.removeChild(item);
 	event.stopPropagation();
 }
-
